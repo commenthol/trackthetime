@@ -13,20 +13,14 @@ var
 	commander = require('commander'),
 	Tasks = require('../').Tasks,
 	Report = require('../').Report,
-	timerange = require('../').timerange;
+	timerange = require('../').timerange,
+	config = require('../').config;
 
-// TODO - move outside
-var config = {
-	folder: path.join(process.env.HOME, '.config', 'ttt'),
-	file  : 'ttt.log',
-	editor: process.env.EDITOR || 'vi'
-};
-config.filename = path.join(config.folder, config.file);
 
 // prepare config dir if file does not exist
 var prep = function (dir, file) {
 	return function(cb) {
-		fs.stat(path.join(dir, file), function(err){
+		fs.stat(path.dirname(config.filename), function(err){
 			if (err) {
 				mkdirp(dir, cb);
 				return;
@@ -82,7 +76,7 @@ var main = {
 			}
 			else if (commander.edit) {
 				self._cmd = [];
-				spawnEditor(config.editor, config.filename);
+				spawnEditor(config.config.editor, config.filename);
 			}
 			else if (
 				commander.day ||
@@ -163,6 +157,7 @@ var main = {
 		return function(cb) {
 			var
 				type,
+				mmt,
 				tmp,
 				from, to,
 				report = new Report(self._tasks),
@@ -188,8 +183,10 @@ var main = {
 					}
 				}
 				else {
+					mmt = report.todayTimeLeft(config.config.daily);
 					console.log(report.toCSV(report.time('week')));
 					console.log(report.toCSV(report.time()));
+					if (mmt) console.log(mmt.format('HH:mm') + ' is ttl');
 				}
 			}
 			cb();
@@ -211,7 +208,9 @@ var main = {
 };
 
 async.series([
-	prep(config.folder, config.file),
+	config.prep(),
+	config.writeDefault(),
+	config.load(),
 	main.cmd(),
 	main.append(),
 	main.read(),

@@ -8,7 +8,8 @@ var
 	assert = require('assert'),
 	Task = require('../lib/task'),
 	Tasks = require('../lib/tasks'),
-	Report = require('../lib/report');
+	Report = require('../lib/report'),
+	fromTo = require('../lib/timerange');
 
 var testTasks = fs.readFileSync(path.join(__dirname, 'fixtures', 'test.log'), 'utf8');
 
@@ -16,7 +17,8 @@ describe('#Report', function() {
 
 	it ('can loop over days', function(){
 		var report = new Report(),
-			res = report._loop('2015-02-25', '2015-03-02'),
+			tmp = fromTo('2015-02-25', '2015-03-02'),
+			res = report._loop(tmp.from, tmp.to),
 			exp = [
 				'2015-02-25',
 				'2015-02-26',
@@ -31,7 +33,8 @@ describe('#Report', function() {
 
 	it ('can loop over weeks', function(){
 		var report = new Report(),
-			res = report._loop('2015-02-1', '2015-03-02', 'week'),
+			tmp = fromTo('2015-02-01', '2015-03-02'),
+			res = report._loop(tmp.from, tmp.to, 'week'),
 			exp = [ 5, 6, 7, 8, 9 ];
 
 		assert.deepEqual(res,exp);
@@ -39,7 +42,8 @@ describe('#Report', function() {
 
 	it ('can loop over months', function(){
 		var report = new Report(),
-			res = report._loop('2015-02-1', '2015-03-02', 'month'),
+			tmp = fromTo('2015-02-01', '2015-03-02'),
+			res = report._loop(tmp.from, tmp.to, 'month'),
 			exp = [ '2015-02', '2015-03' ];
 
 		assert.deepEqual(res,exp);
@@ -50,10 +54,8 @@ describe('#Report', function() {
 			tasks = new Tasks({tasks: tsk.date + ' 09:00 start\n' + tsk.date + ' 17:00 end\n' }),
 			report = new Report(tasks),
 			res = report.time(),
-			exp = {
-				'2015-08-09': 8,
-				'sum': 8
-			 };
+			exp = { 'sum': 8 };
+			exp[tsk.date] = 8;
 
 		assert.deepEqual(res, exp);
 	});
@@ -61,7 +63,8 @@ describe('#Report', function() {
 	it ('can report for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.time('day','2015-04-01', '2015-05-13'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.time('day', tmp.from, tmp.to),
 			exp =  {
 				'2015-04-01': 8,
 				'2015-04-02': 8,
@@ -87,7 +90,8 @@ describe('#Report', function() {
  	it ('can report for a number of weeks', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.time('week','2015-04-01', '2015-05-13'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.time('week', tmp.from, tmp.to),
 			exp = {
 				CW14: 16,
 				CW20: 10,
@@ -112,7 +116,8 @@ describe('#Report', function() {
  	it ('can report for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.time('month', '2015-04-01', '2015-05-13'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.time('month', tmp.from, tmp.to),
 			exp = { sum: 26, '2015-04': 16, '2015-05': 10 };
 
 		assert.deepEqual(res, exp);
@@ -125,14 +130,15 @@ describe('#Report', function() {
 			res = report.prjTime(),
 			exp = { sum: 8 };
 
-		exp['2015-08-09'] = { prj: 8 };
+		exp[tsk.date] = { prj: 8 };
 		assert.deepEqual(res, exp);
 	});
 
 	it ('can report projects for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.prjTime('day', '2015-04-01', '2015-05-13'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.prjTime('day', tmp.from, tmp.to),
 			exp =  {
 				'sum': 26,
 				'2015-04-01': { prj: 8, pause: 1 },
@@ -146,7 +152,8 @@ describe('#Report', function() {
 	it ('can report projects for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.prjTime('month','2015-04-01', '2015-05-13'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.prjTime('month', tmp.from, tmp.to),
 			exp =  {
 				sum: 26,
 				'2015-04': { prj: 12, pause: 2, org: 4 },
@@ -159,7 +166,8 @@ describe('#Report', function() {
 	it ('can report project "prj" for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.prjTime('day','2015-04-01', '2015-05-13', 'prj'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.prjTime('day', tmp.from, tmp.to, 'prj'),
 			exp =  {
 				sum: 12,
 				'2015-04-01': { prj: 8 },
@@ -171,8 +179,9 @@ describe('#Report', function() {
 
 	it ('can report project "prj" for a number of weeks', function(){
 		var tasks = new Tasks({tasks: testTasks }),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
 			report = new Report(tasks),
-			res = report.prjTime('week','2015-04-01', '2015-05-13', 'prj'),
+			res = report.prjTime('week',tmp.from, tmp.to, 'prj'),
 			exp =  { 'CW14': { prj: 12 }, sum: 12 };
 
 		assert.deepEqual(res, exp);
@@ -181,7 +190,8 @@ describe('#Report', function() {
 	it ('can report project "prj" for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
-			res = report.prjTime('month','2015-04-01', '2015-05-13', 'prj'),
+			tmp = fromTo('2015-04-01', '2015-05-13'),
+			res = report.prjTime('month', tmp.from, tmp.to, 'prj'),
 			exp =  { sum: 12, '2015-04': { prj: 12 } };
 
 		assert.deepEqual(res, exp);

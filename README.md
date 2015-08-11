@@ -50,6 +50,10 @@ If your entries have gone out of order, sort it:
 
     ttt -s
 
+To quickly check your last entries:
+
+    ttt -l
+
 ## Reporting
 
 Reporting can be done per day, week, month. Switches are `-w, -w, -m`.

@@ -12,7 +12,8 @@ var
 	moment = require('moment'),
 	commander = require('commander'),
 	Tasks = require('../').Tasks,
-	Report = require('../').Report;
+	Report = require('../').Report,
+	timerange = require('../').timerange;
 
 // TODO - move outside
 var config = {
@@ -59,20 +60,6 @@ var main = {
 	_isCmd: function(cmd) {
 		return ~this._cmd.indexOf(cmd);
 	},
-	// convert `str` to a date using `moment`
-	_toMoment: function(str) {
-		var CAL_REG = /^-(\d+)([dwm][a-z]*)$/;
-		var tmp;
-
-		if (CAL_REG.test(str)) {
-			tmp = str.match(CAL_REG);
-			if (tmp[2] === 'm') tmp[2] = 'M';
-			return moment().subtract(tmp[1], tmp[2]);
-		}
-		else {
-			return moment(str);
-		}
-	},
 
 	// process command line args
 	cmd: function() {
@@ -87,6 +74,7 @@ var main = {
 				.option('-p, --project [prj]', 'report projects only')
 				.option('-f, --from <val>', 'report from "val"')
 				.option('-t, --to <val>', 'report until "val"')
+				.option('-l, --last [n]', 'show last n lines')
 				.parse(process.argv);
 
 			if (commander.sort) {
@@ -106,6 +94,10 @@ var main = {
 			) {
 				self._commander = commander;
 				self._cmd = ['read', 'report'];
+			}
+			else if (commander.last) {
+				self._commander = commander;
+				self._cmd = ['read', 'last'];
 			}
 			else if (self._args.length > 0) {
 				self._cmd = ['append'];
@@ -171,6 +163,7 @@ var main = {
 		return function(cb) {
 			var
 				type,
+				tmp,
 				from, to,
 				report = new Report(self._tasks),
 				c = self._commander;
@@ -178,15 +171,12 @@ var main = {
 			if (self._isCmd('report')) {
 
 				if (c) {
+					tmp  = timerange(c.from, c.to);
+					from = tmp.from;
+					to   = tmp.to;
+
 					if (c.week)  type='week';
 					if (c.month) type='month';
-					if (c.from) {
-						from = self._toMoment(c.from);
-					}
-					if (c.to) {
-						to = self._toMoment(c.to);
-						if (!from) from = moment(to);
-					}
 					if (c.project) {
 						if (c.project === true) {
 							c.project = undefined;
@@ -206,6 +196,18 @@ var main = {
 		};
 	},
 
+	last: function() {
+		var self = this;
+		return function(cb) {
+			if (self._isCmd('last')) {
+				var num = self._commander.last;
+				if (num === true) num = 10;
+				self._tasks.slice(num);
+				console.log(self._tasks.toString());
+			}
+		}
+	}
+
 };
 
 async.series([
@@ -215,7 +217,8 @@ async.series([
 	main.read(),
 	main.sort(),
 	main.write(),
-	main.report()
+	main.report(),
+	main.last()
 ], function(err){
 	if (err) {
 		console.error('\nError:', err.message || err);

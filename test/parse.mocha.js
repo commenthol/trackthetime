@@ -103,6 +103,17 @@ describe('#parse', function() {
 			assertMap(res, exp);
 		});
 
+		it ('can add a new line with time in short form', function(){
+			var res = parse.newLine(['8:1', 'prj','a','description']);
+			var exp = {
+				time: '08:01',
+				project: 'prj',
+				description: 'a description'
+			};
+
+			assertMap(res, exp);
+		});
+
 		it ('can add a new line with date', function(){
 			var res = parse.newLine(['2015-02-01', 'prj','a','description']);
 			var exp = {
@@ -115,9 +126,20 @@ describe('#parse', function() {
 		});
 
 		it ('can add a new line with date without year', function(){
-			var res = parse.newLine(['12-01', 'prj','a','description']);
+			var res = parse.newLine(['12-15', 'prj','a','description']);
 			var exp = {
-				date: '2015-12-01',
+				date: '2015-12-15',
+				project: 'prj',
+				description: 'a description'
+			};
+
+			assertMap(res, exp);
+		});
+
+		it ('can add a new line with date without year short form', function(){
+			var res = parse.newLine(['5-1', 'prj','a','description']);
+			var exp = {
+				date: '2015-05-01',
 				project: 'prj',
 				description: 'a description'
 			};

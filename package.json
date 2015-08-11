@@ -1,6 +1,6 @@
 {
   "name": "trackthetime",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "track working time",
   "main": "index.js",
   "bin": {
@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "colors": "^1.1.2",
-    "diff": "^2.0.1"
+    "diff": "^2.0.1",
+    "sinon": "^1.15.4"
   },
   "repository": {
     "type": "git",

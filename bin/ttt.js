@@ -4,31 +4,13 @@
 
 // module dependencies
 var
-	fs = require('fs'),
-	path = require('path'),
 	child_process = require('child_process'),
 	async = require('async'),
-	mkdirp = require('mkdirp'),
-	moment = require('moment'),
 	commander = require('commander'),
 	Tasks = require('../').Tasks,
 	Report = require('../').Report,
 	timerange = require('../').timerange,
 	config = require('../').config;
-
-
-// prepare config dir if file does not exist
-var prep = function (dir, file) {
-	return function(cb) {
-		fs.stat(path.dirname(config.filename), function(err){
-			if (err) {
-				mkdirp(dir, cb);
-				return;
-			}
-			cb();
-		});
-	};
-};
 
 // open the editor
 var spawnEditor = function(cmd, filename, cb) {
@@ -37,6 +19,7 @@ var spawnEditor = function(cmd, filename, cb) {
 	});
 
 	child.on('exit', function (e, code) {
+		e = e;
 		cb && cb(code);
 	});
 };
@@ -183,10 +166,12 @@ var main = {
 					}
 				}
 				else {
-					mmt = report.todayTimeLeft(config.config.daily);
+					mmt = report.todayTimeLeft(config.config);
 					console.log(report.toCSV(report.time('week')));
 					console.log(report.toCSV(report.time()));
-					if (mmt) console.log(mmt.format('HH:mm') + ' is ttl');
+					if (mmt) {
+            console.log(mmt.format('HH:mm') + ' is ttl');
+          }
 				}
 			}
 			cb();
@@ -202,9 +187,9 @@ var main = {
 				self._tasks.slice(num);
 				console.log(self._tasks.toString());
 			}
-		}
+			cb && cb();
+		};
 	}
-
 };
 
 async.series([

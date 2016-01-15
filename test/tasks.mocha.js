@@ -15,7 +15,7 @@ describe('#Tasks', function() {
 	it ('can split tasks', function(){
 		var tasks = new Tasks({tasks: testTasks});
 		//~ console.log(tasks)
-		assert.equal(tasks.tasks.length, 12);
+		assert.equal(tasks.tasks.length, 21);
 	});
 
 	it ('can convert tasks to human readable format', function(){
@@ -30,7 +30,7 @@ describe('#Tasks', function() {
 	it ('can read tasks from file', function(done){
 		var tasks = new Tasks();
 		tasks.read(path.join(__dirname, 'fixtures', 'testExp.log'), function() {
-			assert.equal(tasks.tasks.length, 12);
+			assert.equal(tasks.tasks.length, 21);
 			done();
 		});
 

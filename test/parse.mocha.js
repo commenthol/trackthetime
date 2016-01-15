@@ -128,7 +128,7 @@ describe('#parse', function() {
 		it ('can add a new line with date without year', function(){
 			var res = parse.newLine(['12-15', 'prj','a','description']);
 			var exp = {
-				date: '2015-12-15',
+				date: (new Date()).getFullYear() + '-12-15',
 				project: 'prj',
 				description: 'a description'
 			};
@@ -139,7 +139,7 @@ describe('#parse', function() {
 		it ('can add a new line with date without year short form', function(){
 			var res = parse.newLine(['5-1', 'prj','a','description']);
 			var exp = {
-				date: '2015-05-01',
+				date: (new Date()).getFullYear() + '-05-01',
 				project: 'prj',
 				description: 'a description'
 			};

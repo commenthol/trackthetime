@@ -5,6 +5,7 @@
 var
 	fs = require('fs'),
 	path = require('path'),
+	sinon = require('sinon'),
 	assert = require('assert'),
 	Task = require('../lib/task'),
 	Tasks = require('../lib/tasks'),
@@ -15,7 +16,7 @@ var testTasks = fs.readFileSync(path.join(__dirname, 'fixtures', 'test.log'), 'u
 
 describe('#Report', function() {
 
-	it ('can loop over days', function(){
+	it('can loop over days', function(){
 		var report = new Report(),
 			tmp = fromTo('2015-02-25', '2015-03-02'),
 			res = report._loop(tmp.from, tmp.to),
@@ -31,7 +32,7 @@ describe('#Report', function() {
 		assert.deepEqual(res,exp);
 	});
 
-	it ('can loop over weeks', function(){
+	it('can loop over weeks', function(){
 		var report = new Report(),
 			tmp = fromTo('2015-02-01', '2015-03-02'),
 			res = report._loop(tmp.from, tmp.to, 'week'),
@@ -40,7 +41,7 @@ describe('#Report', function() {
 		assert.deepEqual(res,exp);
 	});
 
-	it ('can loop over months', function(){
+	it('can loop over months', function(){
 		var report = new Report(),
 			tmp = fromTo('2015-02-01', '2015-03-02'),
 			res = report._loop(tmp.from, tmp.to, 'month'),
@@ -49,7 +50,7 @@ describe('#Report', function() {
 		assert.deepEqual(res,exp);
 	});
 
-	it ('can report working hours for a single day', function(){
+	it('can report working hours for a single day', function(){
 		var tsk = new Task({now: true}),
 			tasks = new Tasks({tasks: tsk.date + ' 09:00 start\n' + tsk.date + ' 17:00 end\n' }),
 			report = new Report(tasks),
@@ -60,7 +61,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report for a number of days', function(){
+	it('can report for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -75,7 +76,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report for a single week', function(){
+	it('can report for a single week', function(){
 		var tsk = new Task({now: true}),
 			tasks = new Tasks({tasks: tsk.date + ' 09:00 start\n' + tsk.date + ' 17:00 end\n' }),
 			report = new Report(tasks),
@@ -87,7 +88,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
- 	it ('can report for a number of weeks', function(){
+ 	it('can report for a number of weeks', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -101,7 +102,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report for a single month', function(){
+	it('can report for a single month', function(){
 		var tsk = new Task({now: true}),
 			tasks = new Tasks({tasks: tsk.date + ' 09:00 start\n' + tsk.date + ' 17:00 end\n' }),
 			report = new Report(tasks),
@@ -113,7 +114,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
- 	it ('can report for a number of months', function(){
+ 	it('can report for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -123,7 +124,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report projects for a single day', function(){
+	it('can report projects for a single day', function(){
 		var tsk = new Task({now: true}),
 			tasks = new Tasks({tasks: tsk.date + ' 09:00 prj desc\n' + tsk.date + ' 17:00 end\n' }),
 			report = new Report(tasks),
@@ -134,7 +135,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report projects for a number of days', function(){
+	it('can report projects for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -149,7 +150,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report projects for a number of months', function(){
+	it('can report projects for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -163,7 +164,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report project "prj" for a number of days', function(){
+	it('can report project "prj" for a number of days', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -177,7 +178,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report project "prj" for a number of weeks', function(){
+	it('can report project "prj" for a number of weeks', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
 			report = new Report(tasks),
@@ -187,7 +188,7 @@ describe('#Report', function() {
 		assert.deepEqual(res, exp);
 	});
 
-	it ('can report project "prj" for a number of months', function(){
+	it('can report project "prj" for a number of months', function(){
 		var tasks = new Tasks({tasks: testTasks }),
 			report = new Report(tasks),
 			tmp = fromTo('2015-04-01', '2015-05-13'),
@@ -196,4 +197,29 @@ describe('#Report', function() {
 
 		assert.deepEqual(res, exp);
 	});
+
+	it('can report time to leave for one day', function () {
+		var clock = sinon.useFakeTimers(+(new Date('2015-05-28T11:00:00')));
+		var tasks = new Tasks({tasks: '2015-05-28\t08:00\tprj\n2015-05-28\t12:00\tpause\n2015-05-28\t12:30\tprj\n' });
+		var report = new Report(tasks);
+		var tmp = report.todayTimeLeft({ daily: 8, weekly: 40 });
+		var res = tmp.format('HH:mm');
+		var exp = '16:30';
+
+		clock.restore();
+		assert.deepEqual(res, exp);
+	});
+
+	it('can report time to leave for last day of week', function () {
+		var clock = sinon.useFakeTimers(+(new Date('2015-06-05T11:00:00')));
+		var tasks = new Tasks({tasks: testTasks });
+		var report = new Report(tasks);
+		var tmp = report.todayTimeLeft({ daily: 8, weekly: 40 });
+		var res = tmp.format('HH:mm');
+		var exp = '14:30';
+
+		clock.restore();
+		assert.deepEqual(res, exp);
+	});
+
 });

@@ -1,6 +1,6 @@
-/node_modules
-/coverage
-/doc
+node_modules/
+coverage/
+doc/
+test/fixtures/testWrite.log
 *.tgz
-/*.log
-/test/fixtures/testWrite.log
+*.log

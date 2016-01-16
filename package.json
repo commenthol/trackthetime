@@ -1,6 +1,6 @@
 {
   "name": "trackthetime",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "track working time",
   "main": "index.js",
   "bin": {

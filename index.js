@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 
 module.exports = {
 	Task     : require('./lib/task'),
 	Tasks    : require('./lib/tasks'),
 	Report   : require('./lib/report'),
-	timerange: require('./lib/timerange'),
-	config   : require('./lib/config')
-};
+	timerange: require('./lib/timerange')
+}

@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 var
-	assert = require('assert');
+	assert = require('assert')
 
 
 var M = {
@@ -13,32 +13,32 @@ var M = {
 	 * @param {Object} exp - expected object
 	 */
 	assertMap: function(res, exp) {
-		var i;
+		var i
 
 		for (i in exp) {
 			if (typeof exp[i] === 'object') {
-				assert.deepEqual(res[i], exp[i]);
+				assert.deepEqual(res[i], exp[i])
 			}
 			else {
-				assert.strictEqual(res[i], exp[i]);
+				assert.strictEqual(res[i], exp[i])
 			}
 		}
 	},
 
 	diffText: function(one, other) {
-		require('colors');
+		require('colors')
 
-		var diff = require('diff').diffChars(one, other);
+		var diff = require('diff').diffChars(one, other)
 
 		diff.forEach(function(part){
 			// green for additions, red for deletions
 			// grey for common parts
 			var color = part.added ? 'green' :
-			part.removed ? 'red' : 'grey';
-			process.stderr.write(part.value[color]);
-		});
+			part.removed ? 'red' : 'grey'
+			process.stderr.write(part.value[color])
+		})
 	},
 
-};
+}
 
-module.exports = M;
+module.exports = M

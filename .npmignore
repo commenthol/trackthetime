@@ -1,8 +1,8 @@
-/node_modules
-/coverage
-/doc
-/test
-.*
+node_modules/
+coverage/
+doc/
+test/
+Makefile
 *.log
 *.tgz
-Makefile
+.*

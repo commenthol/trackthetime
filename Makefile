@@ -1,6 +1,9 @@
-all: 0.12
+all: 0.12 5.
 
 %:
 	n $@ && npm test
 
-.PHONY: all
+docs:
+	markedpp --githubids -i README.md -o README.md
+
+.PHONY: all docs

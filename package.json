@@ -7,6 +7,7 @@
     "ttt": "./bin/ttt.js"
   },
   "scripts": {
+    "all": "npm run clean && npm run doc && npm run lint && npm run test && npm pack",
     "test": "mocha test/*.mocha.js",
     "cover": "istanbul cover _mocha --report lcov --report text -- -R dot test/*.mocha.js",
     "lint": "eslint '**/*.js'",
@@ -23,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "async": "^2.5.0",
+    "asyncc": "^2.0.1",
     "commander": "^2.8.1",
     "hashtree": "^0.7.0",
     "lodash": "^4.17.4",

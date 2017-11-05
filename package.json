@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "mocha test/*.mocha.js",
-    "cover": "istanbul cover _mocha --report lcov --report text -- -R dot --check-leaks test/*.mocha.js",
-    "lint": "jshint --show-non-errors *.js */*.js",
+    "cover": "istanbul cover _mocha --report lcov --report text -- -R dot test/*.mocha.js",
+    "lint": "eslint '**/*.js'",
     "doc": "jsdox -o doc index.js lib/*.js",
     "readme": "markedpp --githubid -i README.md -o README.md",
     "clean": "rm -rf doc coverage"
@@ -17,18 +17,29 @@
   "author": "commenthol <commenthol@gmail.com>",
   "maintainers": "commenthol <commenthol@gmail.com>",
   "license": "MIT",
+  "eslintConfig": {
+    "extends": [
+      "standard"
+    ]
+  },
   "dependencies": {
-    "async": "^1.4.1",
+    "async": "^2.5.0",
     "commander": "^2.8.1",
-    "hashtree": "^0.6.2",
-    "lodash": "^3.10.1",
+    "hashtree": "^0.7.0",
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "moment": "^2.10.6"
   },
   "devDependencies": {
     "colors": "^1.1.2",
-    "diff": "^2.0.1",
-    "sinon": "^1.17.2"
+    "diff": "^3.4.0",
+    "eslint": "^4.10.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "sinon": "^4.0.2"
   },
   "repository": {
     "type": "git",

@@ -24,7 +24,7 @@ e.g.
     ttt coding yet some other lines of code
 
 This adds a line to the `ttt.log` file in `~/.config/ttt/`.
-Specify your <project> without using spaces. <description> may take as much spaces as you like.
+Specify your `<project>` without using spaces. `<description>` may take as much spaces as you like.
 
 If you like to add a line in the past, use (assume it's 17:00h):
 

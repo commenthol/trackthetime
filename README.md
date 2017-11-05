@@ -71,14 +71,14 @@ To quickly check your last entries:
 Configuration can be changed with:
 
     ttt --config
-    
+
 ---
-    
+
 ```js
 {
   "daily": 8,     // daily working hours
   "weekly": 40,   // weekly working hours
-  "editor": "vi", // (optional) your commandline editor of choice 
+  "editor": "vi", // (optional) your commandline editor of choice
                   // if unset then EDITOR env var is used
 }
 ```
@@ -96,9 +96,17 @@ To report all meetings of the current month, type (you need to have typed `ttt m
 
     ttt -m -p meeting
 
+To report all meetings of the current month including breaks:
+
+    ttt -m -p meeting,pause
+
 To restrict reporting to a certain timeframe, e.g. only last week use
 
     ttt -w -t 1week
+
+To report restrict your projects to everything except 'meetings':
+
+    ttt -m -p *,-meeting,pause
 
 ## Options
 

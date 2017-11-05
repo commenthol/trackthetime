@@ -38,6 +38,10 @@ To track your breaks:
 
     ttt p
 
+Continue with previous task:
+
+    ttt c
+
 To track your working end
 
     ttt e

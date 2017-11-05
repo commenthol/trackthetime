@@ -67,102 +67,172 @@ describe('#Tasks', function () {
     var tasks = new Tasks()
     var args = ['2015-06-01', 'vacation']
     var res = tasks.append(args).str
-    var exp =
-  '2015-06-01\t09:00\tvacation\t\n' +
-  '2015-06-01\t17:00\tend\t\n\n'
+    var exp = [
+      '2015-06-01\t09:00\tvacation\t',
+      '2015-06-01\t17:00\tend\t',
+      '',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
   })
 
   it('can insert a task with a duration', function () {
-    var t =
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t11:00\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n'
+    var t = [
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t11:00\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
     var tasks = new Tasks(t)
     var args = ['2015-06-01', '11:12', '+12', 'phone', 'Mr. Burns calling']
     var res = tasks.append(args).str
-    var exp =
-  '2015-06-01\t11:12\tphone\tMr. Burns calling\n' +
-  '2015-06-01\t11:24\t2ndCoffee\t\n'
+    var exp = [
+      '2015-06-01\t11:12\tphone\tMr. Burns calling',
+      '2015-06-01\t11:24\t2ndCoffee\t',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
 
     tasks.sort()
     res = tasks.toString()
-    exp =
-  '# CW 23\n' +
-  '\n' +
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t11:00\t2ndCoffee\t\n' +
-  '2015-06-01\t11:12\tphone\tMr. Burns calling\n' +
-  '2015-06-01\t11:24\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n' +
-  ''
+    exp = [
+      '# CW 23',
+      '',
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t11:00\t2ndCoffee\t',
+      '2015-06-01\t11:12\tphone\tMr. Burns calling',
+      '2015-06-01\t11:24\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
   })
 
   it('can insert a task without an ancestor', function () {
-    var t =
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t11:00\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n'
+    var t = [
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t11:00\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
     var tasks = new Tasks(t)
     var args = ['2015-06-01', '08:02', '+42', 'phone', 'Mr. Burns calling']
     var res = tasks.append(args).str
-    var exp =
-  '2015-06-01\t08:02\tphone\tMr. Burns calling\n' +
-  '2015-06-01\t08:44\t?\t\n'
+    var exp = [
+      '2015-06-01\t08:02\tphone\tMr. Burns calling',
+      '2015-06-01\t08:44\t?\t',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
 
     res = tasks.sort().toString()
-    exp =
-  '# CW 23\n' +
-  '\n' +
-  '2015-06-01\t08:02\tphone\tMr. Burns calling\n' +
-  '2015-06-01\t08:44\t?\t\n' +
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t11:00\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n' +
-  ''
+    exp = [
+      '# CW 23',
+      '',
+      '2015-06-01\t08:02\tphone\tMr. Burns calling',
+      '2015-06-01\t08:44\t?\t',
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t11:00\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
   })
 
   it('can insert a task with duration which colides with successor task', function () {
-    var t =
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t11:00\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n'
+    var t = [
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t11:00\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
     var tasks = new Tasks(t, {console: true})
     var args = ['2015-06-01', '10:30', '+42', 'phone', 'Mr. Burns calling']
     var res = tasks.append(args).str
-    var exp =
-  '2015-06-01\t10:30\tphone\tMr. Burns calling\n' +
-  '#2015-06-01\t11:00\t2ndCoffee\t#DELETED#\n' +
-  '2015-06-01\t11:12\t2ndCoffee\t\n'
+    var exp = [
+      '2015-06-01\t10:30\tphone\tMr. Burns calling',
+      '#2015-06-01\t11:00\t2ndCoffee\t#DELETED#',
+      '2015-06-01\t11:12\t2ndCoffee\t',
+      ''
+    ].join('\n')
     assert.equal(res, exp)
 
     res = tasks.sort().toString()
     // ~ console.log(JSON.stringify(res).replace(/(\\n)/g, '$1\' + \n\''))
-    exp =
-  '# CW 23\n' +
-  '\n' +
-  '2015-06-01\t09:00\tdooh\tmake my day\n' +
-  '2015-06-01\t10:00\t1stCoffee\twith donut\n' +
-  '2015-06-01\t10:30\tphone\tMr. Burns calling\n' +
-  '#2015-06-01\t11:00\t2ndCoffee\t#DELETED#\n' +
-  '2015-06-01\t11:12\t2ndCoffee\t\n' +
-  '2015-06-01\t12:00\tpause\t\n' +
-  '2015-06-01\t13:00\t3rdCoffee\t\n' +
-''
+    exp = [
+      '# CW 23',
+      '',
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t10:00\t1stCoffee\twith donut',
+      '2015-06-01\t10:30\tphone\tMr. Burns calling',
+      '#2015-06-01\t11:00\t2ndCoffee\t#DELETED#',
+      '2015-06-01\t11:12\t2ndCoffee\t',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t13:00\t3rdCoffee\t',
+      ''
+    ].join('\n')
+    assert.equal(res, exp)
+  })
+
+  it('can continue a task', function () {
+    var t = [
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t12:00\tpause\t',
+      ''
+    ].join('\n')
+    var tasks = new Tasks(t)
+    var args = ['2015-06-01', '12:30', 'c']
+    var res = tasks.append(args).str
+    var exp =
+      '2015-06-01\t12:30\tdooh\tmake my day\n'
+    assert.equal(res, exp)
+
+    res = tasks.sort().toString()
+    exp = [
+      '# CW 23',
+      '',
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t12:30\tdooh\tmake my day',
+      ''
+    ].join('\n')
+    assert.equal(res, exp)
+  })
+
+  it('can continue a task even with future tasks', function () {
+    var t = [
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t15:00\tend\t',
+      ''
+    ].join('\n')
+    var tasks = new Tasks(t)
+    var args = ['2015-06-01', '12:30', 'c']
+    var res = tasks.append(args).str
+    var exp =
+      '2015-06-01\t12:30\tdooh\tmake my day\n'
+    assert.equal(res, exp)
+
+    res = tasks.sort().toString()
+    exp = [
+      '# CW 23',
+      '',
+      '2015-06-01\t09:00\tdooh\tmake my day',
+      '2015-06-01\t12:00\tpause\t',
+      '2015-06-01\t12:30\tdooh\tmake my day',
+      '2015-06-01\t15:00\tend\t',
+      '\n'
+    ].join('\n')
     assert.equal(res, exp)
   })
 })

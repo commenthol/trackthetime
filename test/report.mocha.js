@@ -140,6 +140,21 @@ describe('#Report', function () {
     var res = report.prjTime('day', tmp.from, tmp.to)
     var exp = {
       'sum': 26,
+      '2015-04-01': { prj: 8 },
+      '2015-04-02': { prj: 4, org: 4 },
+      '2015-05-12': { new: 10 }
+    }
+
+    assert.deepEqual(res, exp)
+  })
+
+  it('can report projects for a number of days including pause', function () {
+    var tasks = new Tasks(testTasks)
+    var report = new Report(tasks)
+    var tmp = fromTo('2015-04-01', '2015-05-13')
+    var res = report.prjTime('day', tmp.from, tmp.to, '*,pause')
+    var exp = {
+      'sum': 26,
       '2015-04-01': { prj: 8, pause: 1 },
       '2015-04-02': { prj: 4, pause: 1, org: 4 },
       '2015-05-12': { new: 10 }
@@ -155,7 +170,7 @@ describe('#Report', function () {
     var res = report.prjTime('month', tmp.from, tmp.to)
     var exp = {
       sum: 26,
-      '2015-04': { prj: 12, pause: 2, org: 4 },
+      '2015-04': { prj: 12, org: 4 },
       '2015-05': { new: 10 }
     }
 
@@ -250,5 +265,34 @@ describe('#Report', function () {
 
     clock.restore()
     assert.deepEqual(res, exp)
+  })
+
+  describe('selectProjects', function () {
+    var selectProjects = Report.selectProjects
+
+    it('can deselect pause per default', function () {
+      var res = selectProjects()
+      assert.deepEqual(res, {pause: false})
+    })
+
+    it('can select prj', function () {
+      var res = selectProjects(['prj'])
+      assert.deepEqual(res, {prj: true, pause: false})
+    })
+
+    it('can select prj and pause', function () {
+      var res = selectProjects(['prj', 'pause'])
+      assert.deepEqual(res, {prj: true, pause: true})
+    })
+
+    it('can deselect prj', function () {
+      var res = selectProjects(['-prj'])
+      assert.deepEqual(res, {prj: false, pause: false})
+    })
+
+    it('can deselect prj and select pause', function () {
+      var res = selectProjects(['-prj', 'pause'])
+      assert.deepEqual(res, {prj: false, pause: true})
+    })
   })
 })

@@ -4,7 +4,7 @@
 
 // module dependencies
 var childProcess = require('child_process')
-var async = require('async')
+var async = require('asyncc')
 var commander = require('commander')
 var Tasks = require('../').Tasks
 var Report = require('../').Report
@@ -75,11 +75,11 @@ var main = {
         spawnEditor(config.config.editor, config.configfilename)
       } else if (
         commander.day ||
-  commander.week ||
-  commander.month ||
-  commander.project ||
-  commander.from ||
-  commander.to
+        commander.week ||
+        commander.month ||
+        commander.project ||
+        commander.from ||
+        commander.to
       ) {
         self._commander = commander
         self._cmd = ['read', 'report']
@@ -229,6 +229,7 @@ var main = {
 
 async.series([
   config.prep(),
+  config.writeInitial(),
   config.writeDefault(),
   config.load(),
   main.init(),

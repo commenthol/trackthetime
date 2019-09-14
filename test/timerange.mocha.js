@@ -8,8 +8,8 @@ var sinon = require('sinon')
 var fromTo = require('../lib/timerange')
 
 var assertRes = function (res, exp) {
-  assert.equal(res.from.format(), exp.from)
-  assert.equal(res.to.format(), exp.to)
+  assert.strictEqual(res.from.format(), exp.from)
+  assert.strictEqual(res.to.format(), exp.to)
 }
 
 describe('#fromto', function () {

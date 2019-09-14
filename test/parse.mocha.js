@@ -11,7 +11,8 @@ describe('#parse', function () {
     it('can parse a line', function () {
       var res = parse.line('2015-08-07\t22:11\tprj\ta description of what we have done')
 
-      var exp = { date: '2015-08-07',
+      var exp = {
+        date: '2015-08-07',
         time: '22:11',
         project: 'prj',
         description: 'a description of what we have done',
@@ -25,7 +26,8 @@ describe('#parse', function () {
     it('can parse a line with tabs in description', function () {
       var res = parse.line('2015-01-07\t22:11\tprj\ta\tdescription of what we\thave done')
 
-      var exp = { date: '2015-01-07',
+      var exp = {
+        date: '2015-01-07',
         time: '22:11',
         project: 'prj',
         description: 'a description of what we have done',
@@ -83,7 +85,7 @@ describe('#parse', function () {
 
   describe('newLine', function () {
     it('can add a new line without a date', function () {
-      var now = new Task({now: true})
+      var now = new Task({ now: true })
       var res = parse.newLine(['prj', 'a', 'description'])
       var exp = {
         date: now.date,
@@ -163,7 +165,7 @@ describe('#parse', function () {
     })
 
     it('can add a new line with 1:30 h duration', function () {
-      var now = new Task({now: true})
+      var now = new Task({ now: true })
       var res = parse.newLine(['+1:30', 'prj', 'a', 'description'])
       var exp = {
         date: now.date,

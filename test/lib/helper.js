@@ -16,7 +16,7 @@ var M = {
 
     for (i in exp) {
       if (typeof exp[i] === 'object') {
-        assert.deepEqual(res[i], exp[i])
+        assert.deepStrictEqual(res[i], exp[i])
       } else {
         assert.strictEqual(res[i], exp[i])
       }

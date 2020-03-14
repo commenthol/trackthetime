@@ -26,6 +26,7 @@
     "cover": "istanbul cover _mocha --report lcov --report text -- -R dot test/*.mocha.js",
     "doc": "jsdox -o doc index.js lib/*.js",
     "lint": "eslint '**/*.js'",
+    "prepublishOnly": "npm run all",
     "readme": "markedpp --githubid -i README.md -o README.md",
     "test": "mocha test/*.mocha.js"
   },

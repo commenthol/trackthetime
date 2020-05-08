@@ -39,7 +39,6 @@
     "asyncc": "^2.0.4",
     "commander": "^5.0.0",
     "hashtree": "^0.7.0",
-    "lodash": "^4.17.15",
     "mkdirp": "^1.0.3",
     "moment": "^2.24.0"
   },

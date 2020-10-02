@@ -177,6 +177,19 @@ describe('#Report', function () {
     assert.deepStrictEqual(res, exp)
   })
 
+  it('can report projects for a partial week', function () {
+    const tasks = new Tasks(testTasks)
+    const report = new Report(tasks)
+    const tmp = fromTo('2015-06-01', '2015-06-02')
+    const res = report.prjTime('week', tmp.from, tmp.to, '*')
+    const exp = {
+      sum: 16,
+      CW23p: { prj: 16 }
+    }
+
+    assert.deepStrictEqual(res, exp)
+  })
+
   it('can report project "prj" for a number of days', function () {
     const tasks = new Tasks(testTasks)
     const report = new Report(tasks)

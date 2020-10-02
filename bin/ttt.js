@@ -3,18 +3,18 @@
 'use strict'
 
 // module dependencies
-var childProcess = require('child_process')
-var async = require('asyncc')
-var commander = require('commander')
-var Tasks = require('../').Tasks
-var Report = require('../').Report
-var timerange = require('../').timerange
-var file = require('../lib/file')
-var config = require('../lib/config')
+const childProcess = require('child_process')
+const async = require('asyncc')
+const commander = require('commander')
+const Tasks = require('../').Tasks
+const Report = require('../').Report
+const timerange = require('../').timerange
+const file = require('../lib/file')
+const config = require('../lib/config')
 
 // open the editor
-var spawnEditor = function (cmd, filename, cb) {
-  var child = childProcess.spawn(cmd, [filename], {
+const spawnEditor = function (cmd, filename, cb) {
+  const child = childProcess.spawn(cmd, [filename], {
     stdio: 'inherit'
   })
   child
@@ -33,7 +33,7 @@ var spawnEditor = function (cmd, filename, cb) {
 }
 
 // main function
-var main = {
+const main = {
 
   // the commands to perform
   _cmd: [],
@@ -50,7 +50,7 @@ var main = {
 
   // process command line args
   cmd: function () {
-    var self = this
+    const _this = this
     return function (cb) {
       commander
         .option('-s, --sort', 'sort the time track log')
@@ -66,12 +66,12 @@ var main = {
         .parse(process.argv)
 
       if (commander.sort) {
-        self._cmd = ['read', 'sort', 'write']
+        _this._cmd = ['read', 'sort', 'write']
       } else if (commander.edit) {
-        self._cmd = []
+        _this._cmd = []
         spawnEditor(config.config.editor, config.filename)
       } else if (commander.config) {
-        self._cmd = []
+        _this._cmd = []
         spawnEditor(config.config.editor, config.configfilename)
       } else if (
         commander.day ||
@@ -81,15 +81,15 @@ var main = {
         commander.from ||
         commander.to
       ) {
-        self._commander = commander
-        self._cmd = ['read', 'report']
+        _this._commander = commander
+        _this._cmd = ['read', 'report']
       } else if (commander.last) {
-        self._commander = commander
-        self._cmd = ['read', 'last']
-      } else if (self._args.length > 0) {
-        self._cmd = ['read', 'append']
+        _this._commander = commander
+        _this._cmd = ['read', 'last']
+      } else if (_this._args.length > 0) {
+        _this._cmd = ['read', 'append']
       } else {
-        self._cmd = ['read', 'report']
+        _this._cmd = ['read', 'report']
       }
       cb()
     }
@@ -104,13 +104,13 @@ var main = {
 
   // read tasks from file
   read: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('read')) {
+      if (_this._isCmd('read')) {
         file.read(config.filename, function (err, data) {
           if (!err) {
-            self._data = data
-            err = self._tasks.split(data)
+            _this._data = data
+            err = _this._tasks.split(data)
           }
           cb(err)
         })
@@ -122,10 +122,10 @@ var main = {
 
   // write them back
   write: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('write')) {
-        file.write(config.filename, self._tasks.sort().toString(), cb)
+      if (_this._isCmd('write')) {
+        file.write(config.filename, _this._tasks.sort().toString(), cb)
       } else {
         cb()
       }
@@ -134,10 +134,10 @@ var main = {
 
   // write a backup file
   writebackup: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('write')) {
-        file.write(config.filename + '.bak', self._data, cb)
+      if (_this._isCmd('write')) {
+        file.write(config.filename + '.bak', _this._data, cb)
       } else {
         cb()
       }
@@ -146,12 +146,12 @@ var main = {
 
   // append a line to the track log
   append: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('append')) {
-        var obj = self._tasks.append(self._args)
+      if (_this._isCmd('append')) {
+        const obj = _this._tasks.append(_this._args)
         if (obj.err) {
-          self._cmd.push('write')
+          _this._cmd.push('write')
         }
         file.append(config.filename, obj.str, cb)
       } else {
@@ -162,10 +162,10 @@ var main = {
 
   // sort the track log
   sort: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('sort')) {
-        self._tasks.sort()
+      if (_this._isCmd('sort')) {
+        _this._tasks.sort()
       }
       cb()
     }
@@ -173,16 +173,17 @@ var main = {
 
   // give back some stats
   report: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      var type
-      var mmt
-      var tmp
-      var from, to
-      var report = new Report(self._tasks)
-      var c = self._commander
+      let type
+      let mmt
+      let tmp
+      let from
+      let to
+      const report = new Report(_this._tasks)
+      const c = _this._commander
 
-      if (self._isCmd('report')) {
+      if (_this._isCmd('report')) {
         if (c) {
           tmp = timerange(c.from, c.to)
           from = tmp.from
@@ -212,15 +213,15 @@ var main = {
   },
 
   last: function () {
-    var self = this
+    const _this = this
     return function (cb) {
-      if (self._isCmd('last')) {
-        var num = self._commander.last
+      if (_this._isCmd('last')) {
+        let num = _this._commander.last
         if (num === true) {
           num = 10
         }
-        self._tasks.slice(num)
-        console.log(self._tasks.toString())
+        _this._tasks.slice(num)
+        console.log(_this._tasks.toString())
       }
       cb && cb()
     }

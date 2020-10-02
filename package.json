@@ -21,11 +21,11 @@
     "ttt": "./bin/ttt.js"
   },
   "scripts": {
-    "all": "npm run clean && npm run doc && npm run lint && npm run test && npm pack",
+    "all": "npm run clean && npm run lint && npm run test && npm pack",
     "clean": "rm -rf doc coverage",
     "cover": "istanbul cover _mocha --report lcov --report text -- -R dot test/*.mocha.js",
     "doc": "jsdox -o doc index.js lib/*.js",
-    "lint": "eslint '**/*.js'",
+    "lint": "eslint --fix '**/*.js'",
     "prepublishOnly": "npm run all",
     "readme": "markedpp --githubid -i README.md -o README.md",
     "test": "mocha test/*.mocha.js"

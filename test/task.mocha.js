@@ -2,13 +2,13 @@
 
 /* global describe, it */
 
-var assert = require('assert')
-var assertMap = require('./lib/helper').assertMap
-var Task = require('../lib/task')
+const assert = require('assert')
+const assertMap = require('./lib/helper').assertMap
+const Task = require('../lib/task')
 
 describe('#Task', function () {
   it('can create task for now', function () {
-    var task = new Task()
+    const task = new Task()
     task.now()
     // ~ console.log(task)
 
@@ -17,10 +17,10 @@ describe('#Task', function () {
   })
 
   it('can update to a date', function () {
-    var task = new Task()
+    const task = new Task()
     task.update('2015-08-07', '22:11')
 
-    var exp = {
+    const exp = {
       date: '2015-08-07',
       time: '22:11',
       utc: 1438978260000,
@@ -31,7 +31,7 @@ describe('#Task', function () {
   })
 
   it('can add a project description', function () {
-    var exp = {
+    const exp = {
       date: '2015-08-07',
       time: '22:11',
       utc: 1438978260000,
@@ -39,7 +39,7 @@ describe('#Task', function () {
       project: 'myprj',
       description: 'a description describing that task'
     }
-    var task = new Task()
+    const task = new Task()
 
     task.update('2015-08-07', '22:11')
     task.addProject('myprj', 'a description describing that task')
@@ -48,12 +48,12 @@ describe('#Task', function () {
   })
 
   it('can calculate a duration', function () {
-    var task = new Task({ date: '2015-08-07', time: '23:55' })
-    var task2 = new Task()
+    const task = new Task({ date: '2015-08-07', time: '23:55' })
+    const task2 = new Task()
     task2.update('2015-08-08', '00:05')
     task.calcDuration(task2)
 
-    var exp = {
+    const exp = {
       duration: 600
     }
 
@@ -61,38 +61,38 @@ describe('#Task', function () {
   })
 
   it('only accepts a valid date', function () {
-    var exp = {
+    const exp = {
       date: '2015-08-07',
       time: '23:55'
     }
-    var task = new Task({ date: exp.date, time: exp.time })
+    const task = new Task({ date: exp.date, time: exp.time })
 
     assert.ok(!task.update('11-23'))
     assertMap(task, exp)
   })
 
   it('only accepts a valid time', function () {
-    var exp = {
+    const exp = {
       date: '2015-08-07',
       time: '23:55'
     }
-    var task = new Task({ date: '2015-08-07', time: '23:55' })
+    const task = new Task({ date: '2015-08-07', time: '23:55' })
 
     assert.ok(!task.update(undefined, '26:3'))
     assertMap(task, exp)
   })
 
   it('can convert a task to string', function () {
-    var task = new Task({ date: '2015-08-07', time: '23:55', project: 'prj', description: 'a description' })
-    var res = task.toString()
-    var exp = '2015-08-07\t23:55\tprj\ta description'
+    const task = new Task({ date: '2015-08-07', time: '23:55', project: 'prj', description: 'a description' })
+    const res = task.toString()
+    const exp = '2015-08-07\t23:55\tprj\ta description'
 
     assert.strictEqual(res, exp)
   })
 
   it('can set time and duration if project is `sick`', function () {
-    var task = new Task({ date: '2015-08-07', project: 'sick' })
-    var exp = {
+    const task = new Task({ date: '2015-08-07', project: 'sick' })
+    const exp = {
       date: '2015-08-07',
       project: 'sick',
       time: '09:00',
@@ -102,8 +102,8 @@ describe('#Task', function () {
   })
 
   it('can set time and duration if project is `vacation`', function () {
-    var task = new Task({ date: '2015-08-07', project: 'vacation' })
-    var exp = {
+    const task = new Task({ date: '2015-08-07', project: 'vacation' })
+    const exp = {
       date: '2015-08-07',
       project: 'vacation',
       time: '09:00',

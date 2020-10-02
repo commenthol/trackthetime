@@ -22,8 +22,8 @@
   },
   "scripts": {
     "all": "npm run clean && npm run lint && npm run test && npm pack",
-    "clean": "rm -rf doc coverage",
-    "cover": "istanbul cover _mocha --report lcov --report text -- -R dot test/*.mocha.js",
+    "clean": "rm -rf doc coverage .nyc_output",
+    "cover": "nyc -r html -r text npm t",
     "doc": "jsdox -o doc index.js lib/*.js",
     "lint": "eslint --fix '**/*.js'",
     "prepublishOnly": "npm run all",
@@ -56,6 +56,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha": "^8.1.3",
+    "nyc": "^15.1.0",
     "sinon": "^9.1.0"
   },
   "maintainers": "commenthol <commenthol@gmail.com>"

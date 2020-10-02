@@ -31,6 +31,10 @@
     "test": "mocha test/*.mocha.js"
   },
   "eslintConfig": {
+    "env": {
+      "node": true,
+      "mocha": true
+    },
     "extends": [
       "standard"
     ]

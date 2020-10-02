@@ -153,7 +153,9 @@ const main = {
         if (obj.err) {
           _this._cmd.push('write')
         }
-        file.append(config.filename, obj.str, cb)
+        if (obj.str) {
+          file.append(config.filename, obj.str, cb)
+        }
       } else {
         cb()
       }

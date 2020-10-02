@@ -177,5 +177,15 @@ describe('#parse', function () {
 
       assertMap(res, exp)
     })
+
+    it('ignores weird dates 99-99-99', function () {
+      const res = parse.newLine(['99-99-99'])
+      assertMap(res, undefined)
+    })
+
+    it('ignores weird dates 9-99', function () {
+      const res = parse.newLine(['9-99'])
+      assertMap(res, undefined)
+    })
   })
 })

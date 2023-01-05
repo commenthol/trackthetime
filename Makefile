@@ -1,4 +1,4 @@
-all: 12 14
+all: 18
 
 %:
 	n $@ && npm test

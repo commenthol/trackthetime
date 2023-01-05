@@ -1,6 +1,6 @@
 'use strict'
 
-var
+const
   assert = require('assert')
 
 const M = {
@@ -31,7 +31,8 @@ const M = {
     diff.forEach(function (part) {
       // green for additions, red for deletions
       // grey for common parts
-      const color = part.added ? 'green'
+      const color = part.added
+        ? 'green'
         : part.removed ? 'red' : 'grey'
       process.stderr.write(part.value[color])
     })

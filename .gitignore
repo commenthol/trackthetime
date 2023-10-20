@@ -5,3 +5,4 @@ doc/
 test/fixtures/testWrite.log
 *.tgz
 *.log
+pnpm-lock.yaml

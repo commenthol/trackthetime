@@ -5,12 +5,12 @@
 // module dependencies
 const childProcess = require('child_process')
 const async = require('asyncc')
-const commander = require('commander')
 const Tasks = require('../').Tasks
 const Report = require('../').Report
 const timerange = require('../').timerange
 const file = require('../lib/file')
 const config = require('../lib/config')
+const cli = require('../lib/cli')
 
 // open the editor
 const spawnEditor = function (cmd, filename, cb) {
@@ -34,7 +34,6 @@ const spawnEditor = function (cmd, filename, cb) {
 
 // main function
 const main = {
-
   // the commands to perform
   _cmd: [],
   // the tasks to process
@@ -52,19 +51,11 @@ const main = {
   cmd: function () {
     const _this = this
     return function (cb) {
-      commander
-        .option('-s, --sort', 'sort the time track log')
-        .option('-e, --edit', 'edit the time track log')
-        .option('-d, --day', 'report dayly stats')
-        .option('-w, --week', 'report weekly stats')
-        .option('-m, --month', 'report monthly stats')
-        .option('-p, --project [prj]', 'report projects only')
-        .option('-f, --from <val>', 'report from "val"')
-        .option('-t, --to <val>', 'report until "val"')
-        .option('-l, --last [n]', 'show last n lines')
-        .option('    --config', 'open config in editor')
-        .parse(process.argv)
-
+      const commander = cli()
+      if (commander.help) {
+        console.log(commander.help)
+        process.exit()
+      }
       if (commander.sort) {
         _this._cmd = ['read', 'sort', 'write']
       } else if (commander.edit) {
@@ -91,13 +82,17 @@ const main = {
       } else {
         _this._cmd = ['read', 'report']
       }
+
       cb()
     }
   },
 
   init: function () {
     return function (cb) {
-      this._tasks = new Tasks({ console: true, daily: config.config.daily * 3600 })
+      this._tasks = new Tasks({
+        console: true,
+        daily: config.config.daily * 3600
+      })
       cb()
     }.bind(this)
   },
@@ -230,30 +225,33 @@ const main = {
   }
 }
 
-async.series([
-  config.prep(),
-  config.writeInitial(),
-  config.writeDefault(),
-  config.load(),
-  main.init(),
-  main.cmd(),
-  main.read(),
-  main.sort(),
-  main.append(),
-  main.writebackup(),
-  main.write(),
-  main.report(),
-  main.last()
-], function (err) {
-  if (err) {
-    console.error('\nError:', err.message || err)
-    if (err.data) {
-      if (Array.isArray(err.data)) {
-        console.error('    ' + err.data.join('\n    '))
-      } else {
-        console.error(err.data)
+async.series(
+  [
+    config.prep(),
+    config.writeInitial(),
+    config.writeDefault(),
+    config.load(),
+    main.init(),
+    main.cmd(),
+    main.read(),
+    main.sort(),
+    main.append(),
+    main.writebackup(),
+    main.write(),
+    main.report(),
+    main.last()
+  ],
+  function (err) {
+    if (err) {
+      console.error('\nError:', err.message || err)
+      if (err.data) {
+        if (Array.isArray(err.data)) {
+          console.error('    ' + err.data.join('\n    '))
+        } else {
+          console.error(err.data)
+        }
       }
+      console.error()
     }
-    console.error()
   }
-})
+)
